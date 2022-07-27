@@ -29,6 +29,7 @@
   padding: 3rem;
   background-color: #374661;
   border-radius: 3rem;
+  animation: slideLeft 1s ease-in-out;
 }
 
 .imgBox {
@@ -53,7 +54,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* background-color: #374661; */
+  animation: slideRight 1s ease-in-out;
 }
 
 .header {
@@ -70,4 +71,33 @@
 .signup {
   padding: 1rem;
   text-align: center;
+}
+
+.signup:hover {
+  color: rgb(129, 70, 255);
+  cursor: pointer;
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(-50%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(150%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
 }
