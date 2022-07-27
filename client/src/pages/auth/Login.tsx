@@ -4,12 +4,16 @@ import style from "../../styles/login.module.css";
 import pic from "../../design.svg";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
+
 import HttpsIcon from "@mui/icons-material/Https";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import GoogleIcon from "@mui/icons-material/Google";
+
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     email: "",
@@ -98,7 +102,9 @@ const Login = () => {
             >
               Sign in with Google
             </LoadingButton>
-            <p className={style.signup}>Don't have an account? Sign Up</p>
+            <p onClick={() => navigate("/register")} className={style.signup}>
+              Don't have an account? Sign Up
+            </p>
           </div>
         </div>
       </div>
