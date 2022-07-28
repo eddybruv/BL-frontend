@@ -66,7 +66,7 @@ const Signup = () => {
     formData.append("avatar", avatar);
 
     await axios
-      .post("https://simplor.herokuapp.com/api/user/register", formData, config)
+      .post("/api/user/register", formData, config)
       .then((data) => {
         setLoading(false);
         localStorage.setItem("userInfo", data.data);
@@ -81,12 +81,13 @@ const Signup = () => {
       gapi.client.init({
         clientId:
           "26253785310-88f9ki4snsj27qmg52m01qbmoreh5d3g.apps.googleusercontent.com",
-        scope: ""
+        scope: "",
+        apiKey: "AIzaSyBqKeHwtptqPfFJ2szg_F1moJUzhJDU1Ys",
       });
-    }
+    };
 
     gapi.load("client:auth2", start);
-  }, [])
+  }, []);
 
   const responseGoogle = (response: any) => {
     console.log(response);
@@ -208,7 +209,7 @@ const Signup = () => {
                   variant="outlined"
                   loading={loading}
                 >
-                  Sign in with Google
+                  Continue with Google
                 </LoadingButton>
               )}
               cookiePolicy={"single_host_origin"}
