@@ -1,6 +1,7 @@
 .body {
   overflow: hidden;
   padding: 2rem 0 2rem 4.5rem;
+  min-height: 100vh;
 }
 
 .h2 {
