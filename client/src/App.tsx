@@ -4,6 +4,8 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import "./App.css";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
+import Categories from "./pages/Categories";
+import {HomeProvider} from "./context/HomeContext";
 
 const theme = createTheme({
   palette: {
@@ -24,12 +26,15 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Signup />} />
-        </Routes>
-      </div>
+      <HomeProvider>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Signup />} />
+            <Route path="/categories" element={<Categories />} />
+          </Routes>
+        </div>
+      </HomeProvider>
     </ThemeProvider>
   );
 }
