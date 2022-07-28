@@ -31,8 +31,9 @@ const Login = () => {
   const handleSubmit = async () => {
     setLoading(() => true);
     await axios.post("/api/user/login", user).then((data) => {
-      console.log(data.data);
+      localStorage.setItem("userInfo", JSON.stringify(data.data));
       setLoading(() => false);
+      navigate("/categories");
     });
   };
 
