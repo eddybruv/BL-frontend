@@ -1,0 +1,34 @@
+.body {
+  width: 30%;
+  height: 300px;
+  background-color: rgba(69, 82, 106, 0.09);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border-radius: 1rem;
+}
+
+.imageBox {
+  width: 100%;
+  height: 70%;
+}
+
+.imageBox img {
+  width: 100%;
+  height: 100%;
+  object-fit: scale-down;
+}
+
+.bottom {
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+}
+
+.bottom p {
+  font-weight: 200;
+  font-size: 1.1rem;
+}
+
+.bottom p span {
+  font-weight: 400;
+}
