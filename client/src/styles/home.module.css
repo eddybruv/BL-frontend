@@ -1,0 +1,16 @@
+.body {
+  overflow: hidden;
+  padding: 2rem 0 2rem 4.5rem;
+}
+
+.h2 {
+  font-weight: 400;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
