@@ -1,0 +1,14 @@
+.body {
+  background-color: #1f2d47;
+  width: 100%;
+  display: flex;
+}
+.sideNav {
+  width: 20%;
+  position: fixed;
+}
+
+.otherDiv {
+  width: 80%;
+  margin-left: auto;
+}
