@@ -1,0 +1,41 @@
+.body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(15px);
+  z-index: 5;
+}
+
+.content {
+  background-color: #141e32;
+  width: 500px;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  animation: zoomIn .5s ease-in-out;
+}
+
+.content h3 {
+  font-size: 1.3rem;
+  font-weight: 300;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.1);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
