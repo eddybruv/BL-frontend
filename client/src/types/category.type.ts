@@ -1,7 +1,7 @@
 export interface ICategory {
   created_at: string;
-  description: string | null;
+  description: string;
   id: number;
-  image: string | null;
-  name: string | null;
+  image: string;
+  name: string;
 }
