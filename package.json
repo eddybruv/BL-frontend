@@ -1,0 +1,28 @@
+{
+  "name": "bl-frontend",
+  "version": "1.0.0",
+  "description": "onboarding task (frontend)",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd client && react-scripts start",
+    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eddybruv/BL-frontend.git"
+  },
+  "keywords": [
+    "typescript",
+    "react"
+  ],
+  "author": "eddybruv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eddybruv/BL-frontend/issues"
+  },
+  "homepage": "https://github.com/eddybruv/BL-frontend#readme",
+  "engines": {
+    "node": "16.14.0",
+    "npm": "8.12.2"
+  }
+}
