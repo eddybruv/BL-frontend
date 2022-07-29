@@ -15,11 +15,7 @@ const Home = () => {
         .then((data) => setCategories(data.data));
     };
 
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    console.log(categories);
+    fetchData(); 
   }, [categories]);
 
   return (
