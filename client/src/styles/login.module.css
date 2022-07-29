@@ -45,6 +45,7 @@
   line-height: 1.5;
   text-align: right;
   font-size: 18px;
+  text-transform: uppercase;
 }
 
 .rightContainer {
@@ -80,7 +81,7 @@
 
 @keyframes slideRight {
   from {
-    transform: translateX(-50%);
+    transform: translateX(-17%);
     opacity: 0;
   }
 
@@ -92,7 +93,7 @@
 
 @keyframes slideLeft {
   from {
-    transform: translateX(150%);
+    transform: translateX(17%);
     opacity: 0;
   }
 
