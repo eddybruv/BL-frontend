@@ -1,0 +1,39 @@
+.body {
+  padding: 2rem 0 2rem 4.5rem;
+  min-height: 100vh;
+}
+
+.h2 {
+  font-weight: 400;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.inputs {
+  width: fit-content;
+  padding: 0.5rem 0;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.selectImageBox {
+  border: 1px solid #faf9f9;
+  width: 825px;
+  height: 500px;
+  /* max-height: 500px !important; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.selectImageBox img {
+  height: 95%;
+  max-width: 95%;
+}
+
+.buttons {
+  width: 825px;
+  display: flex;
+  justify-content: space-between;
+}
