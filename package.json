@@ -4,7 +4,7 @@
   "description": "onboarding task (frontend)",
   "main": "index.js",
   "scripts": {
-    "start": "cd client && react-scripts start",
+    "start": "cd client && npm start",
     "heroku-postbuild": "cd client && npm install --legacy-peer-deps --only=dev && npm install --legacy-peer-deps && npm run build"
   },
   "repository": {
