@@ -2,6 +2,7 @@ import React, { ChangeEvent, useState, useEffect } from "react";
 import CustomInput from "../../component/CustomInput";
 import style from "../../styles/signup.module.css";
 import pic from "../../signup.svg";
+import Toast from "../../component/misc/Toast";
 
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
@@ -23,6 +24,7 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+  const [displayToast, setDisplayToast] = useState(false);
 
   const [user, setUser] = useState({
     email: "",
@@ -35,6 +37,7 @@ const Signup = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
+    setDisplayToast(false);
     setUser({
       ...user,
       [name]: value,
@@ -72,7 +75,8 @@ const Signup = () => {
         localStorage.setItem("userInfo", data.data);
       })
       .catch(() => {
-        setLoading(false);
+        setLoading(() => false);
+        setDisplayToast(true);
       });
   };
 
@@ -218,6 +222,9 @@ const Signup = () => {
             <p onClick={() => navigate("/")} className={style.login}>
               Already have an account? Login
             </p>
+            {displayToast && (
+              <Toast severity="" message="Error trying to sign up, check input fields" />
+            )}
           </div>
         </div>
       </div>
