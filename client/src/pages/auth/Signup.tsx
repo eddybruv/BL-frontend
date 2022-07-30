@@ -25,6 +25,11 @@ const Signup = () => {
 
   const [loading, setLoading] = useState(false);
   const [displayToast, setDisplayToast] = useState(false);
+  const [googleToast, setGoogleToast] = useState(false);
+  const [googleToastFailure, setGoogleToastFailure] = useState(false);
+
+  const clientId =
+    "26253785310-8d7ona179lpba7mr712htftraj4d333u.apps.googleusercontent.com";
 
   const [user, setUser] = useState({
     email: "",
@@ -37,6 +42,7 @@ const Signup = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
+    setGoogleToast(false);
     setDisplayToast(false);
     setUser({
       ...user,
@@ -69,10 +75,11 @@ const Signup = () => {
     formData.append("avatar", avatar);
 
     await axios
-      .post("/api/user/register", formData, config)
+      .post("https://simplor.herokuapp.com/api/user/register", formData, config)
       .then((data) => {
         setLoading(false);
-        localStorage.setItem("userInfo", data.data);
+        localStorage.setItem("userInfo", JSON.stringify(data.data));
+        navigate("/categories");
       })
       .catch(() => {
         setLoading(() => false);
@@ -83,10 +90,8 @@ const Signup = () => {
   useEffect(() => {
     const start = () => {
       gapi.client.init({
-        clientId:
-          "26253785310-88f9ki4snsj27qmg52m01qbmoreh5d3g.apps.googleusercontent.com",
-        scope: "",
-        apiKey: "AIzaSyBqKeHwtptqPfFJ2szg_F1moJUzhJDU1Ys",
+        clientId,
+        scope: "https://www.googleapis.com/auth/userinfo.profile",
       });
     };
 
@@ -94,7 +99,14 @@ const Signup = () => {
   }, []);
 
   const responseGoogle = (response: any) => {
-    console.log(response);
+    setGoogleToast(true);
+    setUser({
+      ...user,
+      email: response.profileObj.email,
+      first_name: response.profileObj.givenName,
+      last_name: response.profileObj.familyName,
+      password: response.profileObj.googleId,
+    });
   };
 
   return (
@@ -139,6 +151,16 @@ const Signup = () => {
               name="email"
               type="email"
             />
+
+            <br />
+            <CustomInput
+              handleChange={handleChange}
+              value={user.password}
+              placeholder="Password"
+              icon={<HttpsIcon />}
+              name="password"
+              type="password"
+            />
             <br />
             <CustomInput
               handleChange={handleChange}
@@ -147,16 +169,6 @@ const Signup = () => {
               icon={<NumbersIcon />}
               name="phone"
               type="tel"
-            />
-            <br />
-
-            <CustomInput
-              handleChange={handleChange}
-              value={user.password}
-              placeholder="Password"
-              icon={<HttpsIcon />}
-              name="password"
-              type="password"
             />
             <br />
 
@@ -169,7 +181,6 @@ const Signup = () => {
             />
 
             <LoadingButton
-              loading={loading}
               // @ts-ignore
               onClick={() => document.querySelector("input[type=file]").click()}
             >
@@ -201,29 +212,41 @@ const Signup = () => {
             </LoadingButton>
 
             <GoogleLogin
-              clientId="26253785310-88f9ki4snsj27qmg52m01qbmoreh5d3g.apps.googleusercontent.com"
+              clientId={clientId}
               onSuccess={responseGoogle}
+              onFailure={() => setGoogleToastFailure(true)}
               render={(renderProps) => (
                 <LoadingButton
+                  disabled={loading}
                   onClick={renderProps.onClick}
                   startIcon={<GoogleIcon />}
                   sx={{ mt: 2 }}
                   color="secondary"
                   fullWidth
                   variant="outlined"
-                  loading={loading}
                 >
                   Continue with Google
                 </LoadingButton>
               )}
               cookiePolicy={"single_host_origin"}
             />
-
             <p onClick={() => navigate("/")} className={style.login}>
               Already have an account? Login
             </p>
             {displayToast && (
-              <Toast severity="" message="Error trying to sign up, check input fields" />
+              <Toast
+                severity=""
+                message="Error trying to sign up, check input fields"
+              />
+            )}
+            {googleToast && (
+              <Toast
+                severity="Success"
+                message="Success! Input phone number and upload avatar and click sign up"
+              />
+            )}
+            {googleToastFailure && (
+              <Toast message="Google sign up down, try the other way" />
             )}
           </div>
         </div>
