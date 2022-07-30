@@ -19,6 +19,11 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [displayToast, setDisplayToast] = useState(false);
+  const [googleToastFailure, setGoogleToastFailure] = useState(false);
+
+  const clientId =
+    "26253785310-8d7ona179lpba7mr712htftraj4d333u.apps.googleusercontent.com";
+
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState({
     email: "",
@@ -37,10 +42,8 @@ const Login = () => {
   useEffect(() => {
     const start = () => {
       gapi.client.init({
-        clientId:
-          "26253785310-88f9ki4snsj27qmg52m01qbmoreh5d3g.apps.googleusercontent.com",
-        scope: "",
-        apiKey: "AIzaSyBqKeHwtptqPfFJ2szg_F1moJUzhJDU1Ys",
+        clientId,
+        scope: "https://www.googleapis.com/auth/userinfo.profile",
       });
     };
 
@@ -49,13 +52,18 @@ const Login = () => {
 
   const responseGoogle = (response: any) => {
     console.log(response);
+    setUser({
+      ...user,
+      email: response.profileObj.email,
+      password: response.profileObj.googleId,
+    });
+    handleSubmit();
   };
 
   const handleSubmit = async () => {
-    // setDisplayToast(false)
     setLoading(() => true);
     await axios
-      .post("/api/user/login", user)
+      .post("https://simplor.herokuapp.com/api/user/login", user)
       .then((data) => {
         localStorage.setItem("userInfo", JSON.stringify(data.data));
         setLoading(() => false);
@@ -126,8 +134,9 @@ const Login = () => {
               Sign in
             </LoadingButton>
             <GoogleLogin
-              clientId="26253785310-88f9ki4snsj27qmg52m01qbmoreh5d3g.apps.googleusercontent.com"
+              clientId={clientId}
               onSuccess={responseGoogle}
+              onFailure={() => setGoogleToastFailure(true)}
               render={(renderProps) => (
                 <LoadingButton
                   onClick={renderProps.onClick}
@@ -136,7 +145,7 @@ const Login = () => {
                   color="secondary"
                   fullWidth
                   variant="outlined"
-                  loading={loading}
+                  disabled={loading}
                 >
                   Continue with Google
                 </LoadingButton>
@@ -148,6 +157,10 @@ const Login = () => {
             </p>
             {displayToast && (
               <Toast severity="" message="Error trying to sign in" />
+            )}
+
+            {googleToastFailure && (
+              <Toast message="Unsuccessful, try the other way" />
             )}
           </div>
         </div>
