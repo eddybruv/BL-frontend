@@ -102,3 +102,21 @@
     opacity: 1;
   }
 }
+
+@media only screen and (max-width: 1517px) {
+  .leftContainer {
+    display: none;
+  }
+
+  .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .rightContainer {
+    width: fit-content;
+    transform: scale(.8);
+    animation: none;
+  }
+}
+
