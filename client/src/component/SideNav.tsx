@@ -11,7 +11,7 @@ import defaultUserProfile from "../defaultPic.svg";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import PlaylistAddRoundedIcon from "@mui/icons-material/PlaylistAddRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import { Button } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import axios from "axios";
 
 const SideNav = () => {
@@ -20,6 +20,7 @@ const SideNav = () => {
   const { setComponent } = useContext(HomeContext) as IHomeContext;
   const [homeActive, setHomeActive] = useState(true);
   const [createActive, setCreateActive] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const data = localStorage.getItem("userInfo");
   const user: IUser = data && JSON.parse(data);
@@ -37,6 +38,7 @@ const SideNav = () => {
   };
 
   const handleLogout = async () => {
+    setLoading(true);
     const config = {
       headers: {
         Authorization: `Bearer ${user.access}`,
@@ -47,7 +49,7 @@ const SideNav = () => {
       refresh_token: `${user.refresh}`,
     };
     await axios
-      .post("/api/user/logout", token, config)
+      .post("https://simplor.herokuapp.com/api/user/logout", token, config)
       .then(() => {
         localStorage.removeItem("userInfo");
         navigate("/");
@@ -82,14 +84,15 @@ const SideNav = () => {
       </section>
 
       <div className={style.button}>
-        <Button
+        <LoadingButton
           variant="outlined"
           color="secondary"
           startIcon={<LogoutRoundedIcon />}
           onClick={handleLogout}
+          loading={loading}
         >
           Logout
-        </Button>
+        </LoadingButton>
       </div>
     </section>
   );
