@@ -56,14 +56,20 @@ const NewCat = () => {
     // @ts-ignore
     formData.append("image", image);
 
-    await axios.post("/api/category/create", formData, config).then(() => {
-      setLoading(false);
-      setPreview("");
-      setInfo({
-        name: "",
-        description: "",
+    await axios
+      .post(
+        "https://simplor.herokuapp.com/api/category/create",
+        formData,
+        config
+      )
+      .then(() => {
+        setLoading(false);
+        setPreview("");
+        setInfo({
+          name: "",
+          description: "",
+        });
       });
-    });
   };
 
   return (

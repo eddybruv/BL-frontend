@@ -11,11 +11,11 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       await axios
-        .get("/api/category/categories")
+        .get("https://simplor.herokuapp.com/api/category/categories")
         .then((data) => setCategories(data.data));
     };
 
-    fetchData(); 
+    fetchData();
   }, [categories]);
 
   return (

@@ -14,7 +14,9 @@ interface Props {
 
 const DeleteModal = ({ id, handleClose }: Props) => {
   const handleDelete = async () => {
-    await axios.delete(`/api/category/delete/${id}`);
+    await axios.delete(
+      `https://simplor.herokuapp.com/api/category/delete/${id}`
+    );
     handleClose();
   };
 

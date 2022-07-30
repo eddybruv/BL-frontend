@@ -67,7 +67,7 @@ const EditModal = ({ id, name, description, image, handleClose }: Props) => {
     formData.append("image", newImage);
 
     await axios
-      .put(`/api/category/update/${id}`, formData, config)
+      .put(`https://simplor.herokuapp.com/api/category/update/${id}`, formData, config)
       .then(() => {
         setLoading(false);
         handleClose();
