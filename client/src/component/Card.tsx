@@ -31,14 +31,8 @@ const Card = ({ created_at, description, id, image, name }: ICategory) => {
 
   return (
     <section className={style.body} onMouseLeave={() => setHover(() => false)}>
-      <div className={style.imageBox}>
-        {/* @ts-ignore */}
-        <img
-          alt="Category"
-          //
-          onMouseEnter={() => setHover(() => true)}
-          src={image ? image : brokenImage}
-        />
+      <div onMouseEnter={() => setHover(() => true)} className={style.imageBox}>
+        <img alt="Category" src={image ? image : brokenImage} />
         {hover && (
           <div
             onMouseLeave={() => setHover(() => false)}
