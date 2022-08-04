@@ -25,7 +25,7 @@ const Signup = () => {
 
   const [loading, setLoading] = useState(false);
   const [displayToast, setDisplayToast] = useState(false);
-  const [googleToast, setGoogleToast] = useState(false);
+  const [existToast, setExistToast] = useState(false);
   const [googleToastFailure, setGoogleToastFailure] = useState(false);
 
   const clientId =
@@ -38,12 +38,12 @@ const Signup = () => {
     last_name: "",
     phone: "",
   });
-  const [avatar, setAvatar] = useState<File | undefined>(undefined);
+  const [avatar, setAvatar] = useState<File | undefined | string>(undefined);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
-    setGoogleToast(false);
     setDisplayToast(false);
+    setExistToast(false);
     setUser({
       ...user,
       [name]: value,
@@ -54,6 +54,54 @@ const Signup = () => {
     // @ts-ignore
     const image = e.target.files[0];
     setAvatar(image);
+  };
+
+  useEffect(() => {
+    const start = () => {
+      gapi.client.init({
+        clientId,
+        scope: "https://www.googleapis.com/auth/userinfo.profile",
+      });
+    };
+
+    gapi.load("client:auth2", start);
+  }, []);
+
+  const responseGoogle = async (response: any) => {
+    setLoading(true);
+    const formData = new FormData();
+
+    formData.append("first_name", response.profileObj.givenName);
+    formData.append("last_name", response.profileObj.familyName);
+    formData.append("password", response.profileObj.googleId);
+    formData.append("email", response.profileObj.email);
+    formData.append("avatar", response.profileObj.imageUrl);
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    await axios
+      .post("https://simplor.herokuapp.com/api/user/register", formData, config)
+      .then((data) => {
+        setLoading(false);
+        localStorage.setItem("userInfo", JSON.stringify(data.data));
+        navigate("/categories");
+      })
+      .catch(async () => {
+        await axios
+          .post("https://simplor.herokuapp.com/api/user/login", {
+            email: response.profileObj.email,
+            password: response.profileObj.googleId,
+          })
+          .then((data) => {
+            setLoading(false);
+            localStorage.setItem("userInfo", JSON.stringify(data.data));
+            navigate("/categories");
+          });
+      });
   };
 
   const handleSubmit = async () => {
@@ -81,32 +129,17 @@ const Signup = () => {
         localStorage.setItem("userInfo", JSON.stringify(data.data));
         navigate("/categories");
       })
-      .catch(() => {
-        setLoading(() => false);
-        setDisplayToast(true);
+      .catch((error) => {
+        if (
+          error.response.data.detail === "User with this email already exists"
+        )
+          setExistToast(true);
+        else {
+          setDisplayToast(true);
+        }
       });
-  };
 
-  useEffect(() => {
-    const start = () => {
-      gapi.client.init({
-        clientId,
-        scope: "https://www.googleapis.com/auth/userinfo.profile",
-      });
-    };
-
-    gapi.load("client:auth2", start);
-  }, []);
-
-  const responseGoogle = (response: any) => {
-    setGoogleToast(true);
-    setUser({
-      ...user,
-      email: response.profileObj.email,
-      first_name: response.profileObj.givenName,
-      last_name: response.profileObj.familyName,
-      password: response.profileObj.googleId,
-    });
+    setLoading(() => false);
   };
 
   return (
@@ -117,8 +150,8 @@ const Signup = () => {
             <img src={pic} alt="" />
           </div>
           <h3 className={style.slogan}>
-            WE ENABLE THE DIGITALLY INVISIBLE <br /> ECOSYSTEM WITH THE USE OF{" "}
-            <br /> DESIGN THINKING AND <br /> TECHNOLOGY
+            Your Idea. <br /> Your Product. <br /> Your Software Development
+            Experts.
           </h3>
         </div>
         <div className={style.rightContainer}>
@@ -239,15 +272,10 @@ const Signup = () => {
                 message="Error trying to sign up, check input fields"
               />
             )}
-            {googleToast && (
-              <Toast
-                severity="Success"
-                message="Success! Input phone number and upload avatar and click sign up"
-              />
-            )}
             {googleToastFailure && (
               <Toast message="Google sign up down, try the other way" />
             )}
+            {existToast && <Toast message="User with email already exist" />}
           </div>
         </div>
       </div>
