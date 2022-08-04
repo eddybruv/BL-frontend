@@ -12,3 +12,55 @@
   width: 80%;
   margin-left: auto;
 }
+
+.navButton {
+  position: fixed;
+  display: none;
+  z-index: 12;
+}
+
+.body .draw {
+  display: block;
+  animation: slideRight 0.7s ease-in-out;
+}
+
+@media only screen and (max-width: 1490px) {
+  .sideNav {
+    width: 30%;
+    min-width: 330px;
+  }
+  .otherDiv {
+    width: 70%;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .sideNav {
+    display: none;
+    z-index: 10;
+  }
+  .otherDiv {
+    width: 100%;
+    margin: 0;
+    padding-left: 0;
+  }
+  .navButton {
+    display: block;
+    padding: 2rem 0;
+  }
+}
+
+@media only screen and (max-width: 430px) {
+  .body .sideNav.draw {
+    width: 90vw;
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

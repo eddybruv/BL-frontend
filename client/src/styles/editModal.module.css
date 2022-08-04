@@ -67,3 +67,49 @@
     transform: translateY(0%);
   }
 }
+
+@media only screen and (max-width: 1300px) {
+  .inputs {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .selectImageBox {
+    height: fit-content;
+    width: fit-content;
+  }
+
+  .buttons {
+    width: fit-content;
+    gap: 1rem;
+  }
+}
+
+@media only screen and (max-width: 760px) {
+  .header {
+    padding-right: 2rem;
+  }
+
+  .body {
+    padding-left: 0;
+  }
+  .h2 {
+    padding-top: 0.8rem;
+    padding-left: 4rem;
+    font-size: 24px;
+  }
+  .inputs {
+    margin: 0 auto;
+    transform: scale(0.7);
+  }
+
+  .selectImageBox {
+    transform: scale(0.9);
+    margin: 0 auto;
+  }
+
+  .buttons {
+    margin: 0 auto;
+    flex-direction: column;
+  }
+}
