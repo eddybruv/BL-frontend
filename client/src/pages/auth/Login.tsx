@@ -19,6 +19,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [displayToast, setDisplayToast] = useState(false);
+  const [mismatchToast, setMismatchToast] = useState(false);
   const [googleToastFailure, setGoogleToastFailure] = useState(false);
 
   const clientId =
@@ -50,14 +51,29 @@ const Login = () => {
     gapi.load("client:auth2", start);
   }, []);
 
-  const responseGoogle = (response: any) => {
-    console.log(response);
-    setUser({
-      ...user,
-      email: response.profileObj.email,
-      password: response.profileObj.googleId,
-    });
-    handleSubmit();
+  const responseGoogle = async (response: any) => {
+    setLoading(true);
+    await axios
+      .post("https://simplor.herokuapp.com/api/user/login", {
+        email: response.profileObj.email,
+        password: response.profileObj.googleId,
+      })
+      .then((data) => {
+        setLoading(false);
+        localStorage.setItem("userInfo", JSON.stringify(data.data));
+        navigate("/categories");
+      })
+      .catch((err) => {
+        if (
+          err.response.data.detail ===
+          "No active account found with the given credentials"
+        ) {
+          setMismatchToast(true);
+        } else {
+          setDisplayToast(true);
+        }
+      });
+    setLoading(() => false);
   };
 
   const handleSubmit = async () => {
@@ -69,9 +85,16 @@ const Login = () => {
         setLoading(() => false);
         navigate("/categories");
       })
-      .catch(() => {
+      .catch((err) => {
+        if (
+          err.response.data.detail ===
+          "No active account found with the given credentials"
+        ) {
+          setMismatchToast(true);
+        } else {
+          setDisplayToast(true);
+        }
         setLoading(() => false);
-        setDisplayToast(true);
       });
   };
 
@@ -82,12 +105,7 @@ const Login = () => {
           <div className={style.imgBox}>
             <img src={pic} alt="" />
           </div>
-          <h3 className={style.slogan}>
-            We provide above market remuneration for our <br /> staff, as well
-            as profit sharing options <br /> and other additional benefits to
-            make <br /> sure you`re being recognized <br /> for the value you
-            bring <br /> to your role.
-          </h3>
+          <h3 className={style.slogan}>Build with Us</h3>
         </div>
         <div className={style.rightContainer}>
           <div className={style.innerCon}>
@@ -158,7 +176,9 @@ const Login = () => {
             {displayToast && (
               <Toast severity="" message="Error trying to sign in" />
             )}
-
+            {mismatchToast && (
+              <Toast severity="" message="Credentials don't match" />
+            )}
             {googleToastFailure && (
               <Toast message="Unsuccessful, try the other way" />
             )}
