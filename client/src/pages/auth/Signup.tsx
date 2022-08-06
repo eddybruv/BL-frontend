@@ -20,18 +20,27 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { gapi } from "gapi-script";
 
+interface IUser {
+  email: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+}
+
 const Signup = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [displayToast, setDisplayToast] = useState(false);
   const [existToast, setExistToast] = useState(false);
+  const [inputToast, setInputToast] = useState(false);
   const [googleToastFailure, setGoogleToastFailure] = useState(false);
 
   const clientId =
     "26253785310-8d7ona179lpba7mr712htftraj4d333u.apps.googleusercontent.com";
 
-  const [user, setUser] = useState({
+  const [user, setUser] = useState<IUser>({
     email: "",
     password: "",
     first_name: "",
@@ -42,6 +51,7 @@ const Signup = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
+    setInputToast(false);
     setDisplayToast(false);
     setExistToast(false);
     setUser({
@@ -104,8 +114,25 @@ const Signup = () => {
       });
   };
 
+  const checkInputs = (user: IUser) => {
+    if (
+      user.last_name === "" ||
+      user.email === "" ||
+      user.password === "" ||
+      user.first_name === ""
+    )
+      return false;
+    return true;
+  };
+
   const handleSubmit = async () => {
     setLoading(() => true);
+
+    if (!checkInputs(user)) {
+      setLoading(false);
+      setInputToast(true);
+      return;
+    }
 
     const config = {
       headers: {
@@ -276,6 +303,7 @@ const Signup = () => {
               <Toast message="Google sign up down, try the other way" />
             )}
             {existToast && <Toast message="User with email already exist" />}
+            {inputToast && <Toast message="Fill all input fields" />}
           </div>
         </div>
       </div>

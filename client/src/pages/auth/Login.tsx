@@ -15,11 +15,17 @@ import { gapi } from "gapi-script";
 import { GoogleLogin } from "react-google-login";
 import Toast from "../../component/misc/Toast";
 
+interface IUser {
+  email: string;
+  password: string;
+}
+
 const Login = () => {
   const navigate = useNavigate();
 
   const [displayToast, setDisplayToast] = useState(false);
   const [mismatchToast, setMismatchToast] = useState(false);
+  const [inputToast, setInputToast] = useState(false);
   const [googleToastFailure, setGoogleToastFailure] = useState(false);
 
   const clientId =
@@ -34,6 +40,7 @@ const Login = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     setDisplayToast(false);
+    setInputToast(false);
     setUser({
       ...user,
       [name]: value,
@@ -76,8 +83,20 @@ const Login = () => {
     setLoading(() => false);
   };
 
+  const checkInputs = (user: IUser) => {
+    if (user.email === "" || user.password === "") return false;
+    return true;
+  };
+
   const handleSubmit = async () => {
     setLoading(() => true);
+
+    if (!checkInputs(user)) {
+      setLoading(false);
+      setInputToast(true);
+      return;
+    }
+
     await axios
       .post("https://simplor.herokuapp.com/api/user/login", user)
       .then((data) => {
@@ -180,8 +199,9 @@ const Login = () => {
               <Toast severity="" message="Credentials don't match" />
             )}
             {googleToastFailure && (
-              <Toast message="Unsuccessful, try the other way" />
+              <Toast message="Google not responding, try the other way" />
             )}
+            {inputToast && <Toast message="Fill all input fields" />}
           </div>
         </div>
       </div>
